@@ -1,0 +1,29 @@
+; ===================== TASTER =====================
+; Modus 0
+F13::Run notepad.exe
+F14::Send ^c
+F15::Send ^v
+F16::Send {Volume_Up}
+F17::Send {Volume_Down}
+F18::Send {Media_Play_Pause}
+
+; Modus 1
+F19::Run calc.exe
+F20::Send ^x
+F21::Send ^a
+F22::Send {Volume_Up 5}
+F23::Send {Volume_Down 5}
+F24::Send {Media_Next}
+
+; ===================== ENCODER =====================
+; Modus 0
+F25::SoundSet +3
+F26::SoundSet -3
+
+; Modus 1
+F27::Send {WheelUp}
+F28::Send {WheelDown}
+
+; ===================== OPTIONALE PROFILE =====================
+; Mit Umschalter kannst du Funktionen nach Belieben ändern
+; Beispiel: mehrere Profile (Gaming / Office / Schnitt)
