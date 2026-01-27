@@ -1,0 +1,125 @@
+RP2040 Makropad – Fully Programmable (6 Buttons + Encoder + Mode Switch + OLED)
+
+This project shows how to build a custom Makropad with 6 buttons, an encoder, mode switch, and OLED display.
+All buttons and the encoder are PC-controlled, meaning you can assign any function on the PC without reflashing the firmware.
+
+Contents
+
+Hardware Requirements
+
+Wiring
+
+RP2040 Firmware
+
+PC Software (Free)
+
+Step-by-Step Setup
+
+Extensions / Tips
+
+1️⃣ Hardware Requirements
+
+1 × Seeed XIAO RP2040
+
+6 × Push Buttons
+
+1 × Mode Switch
+
+1 × Rotary Encoder (no click)
+
+1 × I²C OLED 128×64 (optional)
+
+Jumper wires / Breadboard or PCB
+
+Optional: Enclosure, resistors if needed (internal pull-ups used)
+
+2️⃣ Wiring
+Buttons (connect to GND)
+
+Button 1 → GPIO 28
+
+Button 2 → GPIO 29
+
+Button 3 → GPIO 0
+
+Button 4 → GPIO 1
+
+Button 5 → GPIO 2
+
+Button 6 → GPIO 4
+
+Mode Switch
+
+Pin → GPIO 3
+
+GND → GND
+
+Encoder (no click)
+
+A → GPIO 6
+
+B → GPIO 7
+
+OLED (I²C)
+
+SDA → GPIO 26
+
+SCL → GPIO 27
+
+3️⃣ RP2040 Firmware
+
+Filename: RP2040 Code.ino
+
+Features:
+
+6 buttons with 2 functions via mode switch
+
+Encoder has 2 functions per mode
+
+OLED displays current mode
+
+All actions are sent as HID key events, no fixed macros in the device
+
+4️⃣ PC Software (Free)
+
+Program: AutoHotkey (AHK) – free and open-source
+
+Filename: Test Script.ahk
+
+Features:
+
+All buttons and encoder can be freely assigned on the PC
+
+Mode switch changes all button/encoder functions
+
+5️⃣ Step-by-Step Setup
+
+Assemble the hardware according to the pin layout
+
+Install Arduino IDE
+
+Select RP2040 board (XIAO RP2040)
+
+Upload firmware (RP2040 Code.ino)
+
+Install AutoHotkey
+
+Run script (Test Script.ahk)
+
+Flip the mode switch → OLED shows current mode
+
+Test buttons and encoder
+
+Modify the functions anytime in the AHK script without reflashing the firmware
+
+6️⃣ Extensions / Tips
+
+Display labels for buttons per mode on OLED
+
+More than 2 modes → use extra switches or buttons
+
+Encoder can perform different actions per mode
+
+Save multiple profiles (gaming, video editing, office) in AutoHotkey
+
+All buttons and encoder are fully dynamic, firmware stays the same
