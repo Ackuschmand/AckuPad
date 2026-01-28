@@ -40,6 +40,12 @@ The mode switching is done using a **normal mechanical keyboard switch**, identi
 ### Output
 - 1 × I²C OLED Display (128×64)
 
+### Mechanical
+- 4 × M3x5mx4mm heatset inserts
+- 4 × M3x16mm screws
+- 1 × 3d-printed Box
+- 1 × PCB
+
 All switches work exactly the same electrically.
 
 ---
