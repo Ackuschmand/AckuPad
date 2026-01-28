@@ -130,11 +130,10 @@ All changes are done on the PC side.
 |--------|------|
 | 1 | Seeed XIAO RP2040 |
 | 7 | Mechanical keyboard switches (MX-compatible) |
-| 1 | Rotary encoder (without push button) |
-| 1 | OLED display 128×64 (I²C) |
+| 1 | Rotary encoder |
+| 1 | 0.91 inch OLED displays |
 | 1 | Custom PCB |
-| – | Diodes (optional, depending on design) |
-| – | Pin headers / wiring |
+| - | Pin headers / wiring |
 
 ---
 
@@ -143,8 +142,12 @@ All changes are done on the PC side.
 |--------|------|
 | 1 | 3D printed case – top |
 | 1 | 3D printed case – bottom |
+| 1 | 3D printed case – switch holder |
 | 1 | Encoder knob |
-| 4–6 | Screws (M2 or M3, depending on case design) |
+| 7 | Blank DSA keycaps |
+| 4 | Screws (M3x16mm) |
+| 4 | Heatset inserts (M3x5mx4mm) |
+
 
 ---
 
@@ -159,7 +162,7 @@ All changes are done on the PC side.
   - Rotary encoder
 - Recommended filament: **PLA or PETG**
 - Printing orientation: flat on bed
-- Supports: not required (depending on printer)
+- Supports: Required for the lid and the switch holder
 
 
 <img width="743" height="575" alt="3D model" src="https://github.com/user-attachments/assets/f4cd8f48-4f7b-4f7c-bfca-46a6c5788267" />
