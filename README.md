@@ -1,122 +1,213 @@
-# AckuPad
-Ackupad – a compact, fully programmable macro pad with multiple buttons and a customizable encoder. Perfect for gaming, editing, or PC control, each button can have two functions, giving you maximum efficiency and control at your fingertips.
+# RP2040 Programmable Makropad  
+**6 Buttons • Mode Key • Encoder • OLED • PCB • 3D Printed Case**
+
+This project is a **fully programmable Makropad** based on the **Seeed XIAO RP2040**.  
+All buttons and the rotary encoder are **assigned on the PC**, not fixed in firmware.
+
+The mode switching is done using a **normal mechanical keyboard switch**, identical to the other buttons.
+
+---
+
+## ✨ Features
+
+- 6 mechanical keyboard switches  
+- 1 mechanical keyboard switch as **Mode key**  
+- 2 functions per button using the mode key  
+- Rotary encoder (no click), PC-assignable  
+- OLED display showing current mode  
+- USB HID device (keyboard emulation)  
+- Free PC software (AutoHotkey)  
+- Custom PCB  
+- 3D printed enclosure  
+
+---
+
+## 📁 Project Structure
 
 
+---
+
+## 🔌 Electronics
+
+### Microcontroller
+- **Seeed Studio XIAO RP2040**
+
+### Inputs
+- 6 × Mechanical keyboard switches (momentary)
+- 1 × Mechanical keyboard switch (Mode key)
+- 1 × Rotary encoder (A/B only, no push button)
+
+### Output
+- 1 × I²C OLED Display (128×64)
+
+All switches work exactly the same electrically.
+
+---
+
+## 🧷 Pin Assignment
+
+### Buttons
+| Function | GPIO |
+|--------|------|
+| Button 1 | GPIO 28 |
+| Button 2 | GPIO 29 |
+| Button 3 | GPIO 0 |
+| Button 4 | GPIO 1 |
+| Button 5 | GPIO 2 |
+| Button 6 | GPIO 4 |
+
+### Mode Key (Mechanical Switch)
+| Function | GPIO |
+|--------|------|
+| Mode Button | GPIO 3 |
+
+(All switches connect to **GND**, internal pull-ups are used)
 
 
+---
+
+### Rotary Encoder
+| Signal | GPIO |
+|------|------|
+| A | GPIO 6 |
+| B | GPIO 7 |
+
+---
+
+### OLED Display (I²C)
+| Signal | GPIO |
+|------|------|
+| SDA | GPIO 26 |
+| SCL | GPIO 27 |
 
 
-Ackupad – Programmable Macro Pad for Maximum Control
+<img width="601" height="824" alt="Circuit diagram" src="https://github.com/user-attachments/assets/740a71b3-1ff4-48f9-bc8d-6027682f144f" />
 
-The Ackupad is a fully programmable macro pad for PC control, gaming, video editing, or any application that requires fast key sequences and versatile controls. It is compact, versatile, and ready to use once the PCB is assembled.
 
-Features
+<img width="716" height="566" alt="PCB" src="https://github.com/user-attachments/assets/c375da47-4e1f-46ed-bf93-26b88f67f15b" />
 
-6 Buttons + Toggle Switch: Each button can have two functions depending on the switch position.
 
-Rotary Encoder: Fully customizable for volume, scrolling, zooming, or other functions.
+---
 
-User-Assembled PCB: All components must be soldered by you according to the provided PCB design.
+## 🧠 How It Works
 
-3D-Printed Case: Sturdy, compact, and customizable; all CAD files included.
+- The RP2040 acts as a **USB HID keyboard**
+- Each button sends a **unique key combination**
+- The **mode key acts as a layer switch**
+- When the mode key is pressed, all buttons and the encoder change their function
+- The encoder sends different key events depending on rotation direction and mode
+- The OLED displays the currently active mode
 
-PC Compatibility: Works on Windows/Linux/Mac, sending keyboard inputs directly.
+➡️ No macros are hardcoded in the firmware.
 
-Flexible Firmware: Button functions and encoder behavior can be easily modified.
+---
 
-Repository Contents
+## 💻 PC Software
 
-/PCB – PCB design files, schematic, and assembly guide (components not pre-soldered)
+- **AutoHotkey (free & open-source)**
+- Script file: `Test Script.ahk`
 
-/CAD – 3D printing files for the case (STL, STEP)
+The script maps received key combinations to actions such as:
+- Application control
+- Media keys
+- System shortcuts
+- Custom scripts
 
-/Firmware – Arduino IDE project for Seeed XIAO RP2040, example code, libraries
+All changes are done on the PC side.
 
-Hardware
+---
 
-Required Components (to be soldered by the user):
+## 🧾 Bill of Materials (BOM)
 
-Microcontroller: Seeed XIAO RP2040
+### Electronics
+| Quantity | Part |
+|--------|------|
+| 1 | Seeed XIAO RP2040 |
+| 7 | Mechanical keyboard switches (MX-compatible) |
+| 1 | Rotary encoder (without push button) |
+| 1 | OLED display 128×64 (I²C) |
+| 1 | Custom PCB |
+| – | Diodes (optional, depending on design) |
+| – | Pin headers / wiring |
 
-6 Pushbuttons
+---
 
-1 Toggle Switch
+### Mechanical
+| Quantity | Part |
+|--------|------|
+| 1 | 3D printed case – top |
+| 1 | 3D printed case – bottom |
+| 1 | Encoder knob |
+| 4–6 | Screws (M2 or M3, depending on case design) |
 
-1 Rotary Encoder
+---
 
-Resistors / other components per assembly guide
+## 🖨️ 3D Printed Case
 
-Wires for connections
+- Files located in `/CAD`
+- Designed for:
+  - XIAO RP2040
+  - Custom PCB
+  - Mechanical keyboard switches
+  - OLED display
+  - Rotary encoder
+- Recommended filament: **PLA or PETG**
+- Printing orientation: flat on bed
+- Supports: not required (depending on printer)
 
-GPIO Layout (XIAO RP2040):
 
-Function	GPIO Pin
-Button 1	28
-Button 2	29
-Button 3	0
-Button 4	1
-Button 5	2
-Button 6	4
-Toggle Switch	3
-Encoder A/B	5 / 6
-Software / Firmware
+<img width="743" height="575" alt="3D model" src="https://github.com/user-attachments/assets/f4cd8f48-4f7b-4f7c-bfca-46a6c5788267" />
 
-Arduino IDE:
 
-Install the board definition for Seeed XIAO RP2040.
+---
 
-Open the firmware from the /Firmware folder.
+## 🧪 Setup Instructions
 
-Install required libraries (e.g., Keyboard.h or HID-Project).
+1. Solder all switches and components onto the PCB  
+2. Flash `RP2040 Code.ino` using Arduino IDE  
+3. Connect the Makropad via USB  
+4. Install AutoHotkey  
+5. Run `Test Script.ahk`  
+6. Assign functions in the script  
+7. Hold or press the mode key to access second-layer functions  
 
-Code Structure:
+---
 
-Each button checks the toggle switch state.
+## 🔧 Customization Ideas
 
-Depending on the switch, one of two functions is triggered.
+- Add more layers
+- Display active functions on the OLED
+- Multiple AutoHotkey profiles
+- Different layouts for:
+  - Gaming
+  - Video editing
+  - Streaming
+  - CAD
 
-The rotary encoder can control volume, scrolling, or other actions.
+---
 
-Example Functions:
+## 📜 License
 
-Button 1 → Space
+This project is licensed under the **Apache License 2.0**.
 
-Toggle + Button 1 → Enter
+---
 
-Encoder → Volume up/down
+## 📷 Media
 
-Customization:
+Add images of:
+- PCB (front and back)
+- Assembled Makropad
+- 3D printed enclosure
+- OLED in operation
 
-Functions can be freely changed or expanded.
+---
 
-Suitable for gaming, multimedia, or software control.
+## ⭐ Notes
 
-Usage
+- Firmware remains generic
+- All logic is PC-controlled
+- Easy to modify and extend
 
-Solder all components onto the PCB according to the assembly guide.
+---
 
-Insert the XIAO RP2040 into the board.
-
-Mount the PCB in the 3D-printed case.
-
-Connect the Ackupad via USB to your PC.
-
-Upload the firmware via Arduino IDE if needed.
-
-Test buttons and encoder to ensure correct functionality.
-
-Tips
-
-Debouncing: Software debouncing is integrated in the firmware.
-
-Case Customization: CAD files can be modified to adjust the design.
-
-Expandability: Additional buttons, encoders, or LEDs can be added easily.
-
-License
-
-This project is licensed under the Apache License 2.0. You may copy, modify, or use the code commercially, provided you comply with the license terms.
-
-Summary
-
-The Ackupad combines multi-function buttons, a toggle switch, and a rotary encoder in a compact macro pad. PCB must be soldered by the user, and the case is 3D-printed. Ideal for gaming, video editing, or PC control – ready to use after assembly.
+**If you like this project, consider starring the repository ⭐**
