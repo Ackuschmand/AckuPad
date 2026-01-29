@@ -55,12 +55,15 @@ Apache License 2.0
 ## Pictures
 
 PCB:
+
 <img width="716" height="566" alt="PCB" src="https://github.com/user-attachments/assets/ed63254d-da2a-4dad-9439-b7b7b34285ae" />
 
 Circuit diagram:
+
 <img width="601" height="824" alt="Circuit diagram" src="https://github.com/user-attachments/assets/9d3c7b90-897c-45b0-8bd3-e925bec5bdd4" />
 
 Case:
+
 <img width="743" height="575" alt="3D model" src="https://github.com/user-attachments/assets/6fec6216-bd4d-4460-8570-6134e999f548" />
 
 
