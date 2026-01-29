@@ -1,17 +1,15 @@
 # AckuPad
 
-Programmable Makropad based on a Seeed XIAO RP2040.  
-Firmware and PC script are provided separately.
+Programmable Makropad based on a Seeed XIAO RP2040 with 6 switches, a toggle switch, an OLED display and a rotary encoder!
 
 ---
 
-## Bill of Materials (BOM)
+## Bill of Materials
 
 ### Electronics
 - 1× Seeed XIAO RP2040  
 - 7× MX-Style switches  
-  (- 6× normal buttons  
-  - 1× mode button  )
+  (6× normal buttons, 1× mode button)
 - 1× EC11 Rotary encoder  
 - 1x 0.91 inch OLED displays  
 - 1× PCB  
@@ -43,12 +41,6 @@ Firmware and PC script are provided separately.
 - `RP2040 Code.ino` – firmware  
 - `Test Script.ahk` – PC script  
 - PCB and CAD files are in their respective folders
-
----
-
-## License
-
-Apache License 2.0
 
 ---
 
