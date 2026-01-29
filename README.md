@@ -58,9 +58,11 @@ PCB:
 
 <img width="716" height="566" alt="PCB" src="https://github.com/user-attachments/assets/ed63254d-da2a-4dad-9439-b7b7b34285ae" />
 
+
 Circuit diagram:
 
 <img width="601" height="824" alt="Circuit diagram" src="https://github.com/user-attachments/assets/9d3c7b90-897c-45b0-8bd3-e925bec5bdd4" />
+
 
 Case:
 
