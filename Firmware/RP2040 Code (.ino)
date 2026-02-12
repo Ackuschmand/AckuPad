@@ -113,7 +113,7 @@ void handleMode() {
     modeButtonState = reading;
   }
   lastModeReading = reading;
-}ba
+}
 
 String getModeText() {
   return (mode == 0) ? "Modus 1" : "Modus 2";
@@ -157,23 +157,26 @@ void handleEncoder() {
 
   if (newPos != lastEncPos) {
     String txt;
+
+    // Ctrl nur einmal drücken
+    Keyboard.press(KEY_LEFT_CTRL);
+
     if (newPos > lastEncPos) {
       // Ctrl + F13
-      Keyboard.press(KEY_LEFT_CTRL);
-      Keyboard.press(encRight[mode]);
+      Keyboard.press(KEY_F13);
       delay(3);
-      Keyboard.release(encRight[mode]);
-      Keyboard.release(KEY_LEFT_CTRL);
-      txt = "Encoder rechts";
+      Keyboard.release(KEY_F13);
+      txt = "Ctrl + F13";
     } else {
       // Ctrl + F14
-      Keyboard.press(KEY_LEFT_CTRL);
-      Keyboard.press(encLeft[mode]);
+      Keyboard.press(KEY_F14);
       delay(3);
-      Keyboard.release(encLeft[mode]);
-      Keyboard.release(KEY_LEFT_CTRL);
-      txt = "Encoder links";
+      Keyboard.release(KEY_F14);
+      txt = "Ctrl + F14";
     }
+
+    // Ctrl wieder loslassen
+    Keyboard.release(KEY_LEFT_CTRL);
 
     showText(txt, false, false); // schneller Slide
     encoderActive = true;
@@ -274,4 +277,3 @@ void showBootScreen() {
     display.display();
   }
 }
-aaabbaaaaaaaaaaabbbaabbaabbbbaabbab
