@@ -1,0 +1,187 @@
+; --- AckuPad Konfigurator v2.0 - GLASS EDITION ---
+#NoEnv
+#Persistent
+SetBatchLines, -1
+#SingleInstance, Force
+
+SettingsFile := A_ScriptDir "\AckuPadSettings.ini"
+
+; ==============================================================================
+; === DESIGN-EINSTELLUNGEN (IMAGE STYLE) ===
+; ==============================================================================
+S := 0.25 
+BW := 70, BH := 60 
+TransColor := "000000" ; Hintergrund wird durch Transparenz ausgeblendet
+
+; Glass Pallette aus deinem Bild
+Col_BG := "000000"       ; Echt Schwarz für Transparenz
+Col_Panel := "1A202C"    ; Dark Blue-Gray Panel
+Col_Text := "FFFFFF"     ; Reinweiß
+Col_Accent := "00D1FF"   ; Cyan Accent
+Col_SubText := "94A3B8"  ; Light Gray
+Col_Btn := "2D3748"      ; Darker Button
+
+; Deine kalibrierten Korrekturen
+Korr_M1T1_X := -28, Korr_M1T1_Y := -40
+Korr_M1T2_X := -40, Korr_M1T2_Y := -35
+Korr_M1T3_X := -58, Korr_M1T3_Y := -35
+Korr_M1T4_X := -25, Korr_M1T4_Y := -55
+Korr_M1T5_X := -40, Korr_M1T5_Y := -55
+Korr_M1T6_X := -58, Korr_M1T6_Y := -55
+Korr_M1Enc_X := -85, Korr_M1Enc_Y := -40
+
+Korr_M2T1_X := -33, Korr_M2T1_Y := -60
+Korr_M2T2_X := -48, Korr_M2T2_Y := -55
+Korr_M2T3_X := -63, Korr_M2T3_Y := -55
+Korr_M2T4_X := -30, Korr_M2T4_Y := -80
+Korr_M2T5_X := -50, Korr_M2T5_Y := -78
+Korr_M2T6_X := -63, Korr_M2T6_Y := -75
+Korr_M2Enc_X := -90, Korr_M2Enc_Y := -60
+
+ActionList := "Kopieren (^c)|Einfügen (^v)|Ausschneiden (^x)|Rückgängig (^z)|Alles Markieren (^a)|Speichern (^s)|Enter ({Enter})|Backspace ({Backspace})|--- MEDIEN ---|Lauter ({Volume_Up})|Leiser ({Volume_Down})|Stumm ({Volume_Mute})|Play/Pause ({Media_Play_Pause})|Nächster Titel ({Media_Next})|Vorheriger Titel ({Media_Prev})|--- TOOLS ---|Task-Manager (^+{Esc})|Browser öffnen|Eigene Eingabe..."
+
+; --- HAUPT-GUI ---
+Gui, Color, %Col_BG%
+Gui +LastFound -Caption +AlwaysOnTop +ToolWindow
+Gui, Font, S16 Bold Q5, Segoe UI Variable Display 
+
+; Das Panel aus dem Bild (Simulation durch eine Textbox)
+Gui, Add, Text, x0 y0 w420 h790 Background%Col_Panel% +0x40000000, 
+Gui, Font, S14 Bold Q5, Segoe UI Variable Display
+Gui, Add, Text, x20 y20 w380 c%Col_Text% BackgroundTrans, AckuPad
+Gui, Font, S12 Normal c%Col_SubText% BackgroundTrans, Segoe UI Variable Display
+Gui, Add, Text, x20 y50 w380 c%Col_SubText% BackgroundTrans, Konfigurator
+
+; MODUS 1
+Gui, Font, S5 Semibold Q5, Cascadia Code
+Gui, Add, Text, x20 y90 c%Col_Accent% BackgroundTrans, MODUS 1
+If FileExist(A_ScriptDir "\layout_m1.png")
+    Gui, Add, Picture, x10 y115 w400 h-1 BackgroundTrans, %A_ScriptDir%\layout_m1.png
+
+; Klick-Flächen Modus 1 (Unsichtbar)
+Gui, Add, Text, % "BackgroundTrans x" (361*S)+Korr_M1T1_X " y" (640*S+20+60-20)+Korr_M1T1_Y " w" BW " h" BH " gShowMenu vModus1_T1",
+Gui, Add, Text, % "BackgroundTrans x" (720*S)+Korr_M1T2_X " y" (627*S+20+60-20)+Korr_M1T2_Y " w" BW " h" BH " gShowMenu vModus1_T2",
+Gui, Add, Text, % "BackgroundTrans x" (1081*S)+Korr_M1T3_X " y" (630*S+20+60-20)+Korr_M1T3_Y " w" BW " h" BH " gShowMenu vModus1_T3",
+Gui, Add, Text, % "BackgroundTrans x" (345*S)+Korr_M1T4_X " y" (1000*S+20+60-20)+Korr_M1T4_Y " w" BW " h" BH " gShowMenu vModus1_T4",
+Gui, Add, Text, % "BackgroundTrans x" (718*S)+Korr_M1T5_X " y" (998*S+20+60-20)+Korr_M1T5_Y " w" BW " h" BH " gShowMenu vModus1_T5",
+Gui, Add, Text, % "BackgroundTrans x" (1082*S)+Korr_M1T6_X " y" (997*S+20+60-20)+Korr_M1T6_Y " w" BW " h" BH " gShowMenu vModus1_T6",
+Gui, Add, Text, % "BackgroundTrans x" (1643*S)+Korr_M1Enc_X " y" (556*S+20+60-20)+Korr_M1Enc_Y " w80 h70 gShowMenu vModus1_Enc",
+
+; MODUS 2
+M2V := 420 
+Gui, Font, S5 Semibold Q5, Cascadia Code
+Gui, Add, Text, x20 y400 c%Col_Accent% BackgroundTrans, MODUS 2
+If FileExist(A_ScriptDir "\layout_m2.png")
+    Gui, Add, Picture, x10 y%M2V%+25 w400 h-1 BackgroundTrans, %A_ScriptDir%\layout_m2.png
+
+; Klick-Flächen Modus 2
+Gui, Add, Text, % "BackgroundTrans x" (361*S)+Korr_M2T1_X " y" (640*S+M2V+50-45)+Korr_M2T1_Y " w" BW " h" BH " gShowMenu vModus2_T1",
+Gui, Add, Text, % "BackgroundTrans x" (720*S)+Korr_M2T2_X " y" (627*S+M2V+50-45)+Korr_M2T2_Y " w" BW " h" BH " gShowMenu vModus2_T2",
+Gui, Add, Text, % "BackgroundTrans x" (1081*S)+Korr_M2T3_X " y" (630*S+M2V+50-45)+Korr_M2T3_Y " w" BW " h" BH " gShowMenu vModus2_T3",
+Gui, Add, Text, % "BackgroundTrans x" (345*S)+Korr_M2T4_X " y" (1000*S+M2V+50-45)+Korr_M2T4_Y " w" BW " h" BH " gShowMenu vModus2_T4",
+Gui, Add, Text, % "BackgroundTrans x" (718*S)+Korr_M2T5_X " y" (998*S+M2V+50-45)+Korr_M2T5_Y " w" BW " h" BH " gShowMenu vModus2_T5",
+Gui, Add, Text, % "BackgroundTrans x" (1082*S)+Korr_M2T6_X " y" (997*S+M2V+50-45)+Korr_M2T6_Y " w" BW " h" BH " gShowMenu vModus2_T6",
+Gui, Add, Text, % "BackgroundTrans x" (1643*S)+Korr_M2Enc_X " y" (556*S+M2V+50-45)+Korr_M2Enc_Y " w80 h70 gShowMenu vModus2_Enc",
+
+; Footer Buttons (Modern/Flach)
+Gui, Font, S9 Semibold c%Col_Text%
+Gui, Add, Button, x20 y720 w180 h45 gReloadScript,  RESTART
+Gui, Add, Button, x220 y720 w180 h45 gGuiClose,  EXIT
+
+WinSet, TransColor, %TransColor%
+Gui, Show, w420 h790, AckuPad Config
+return
+
+; --- AUSWAHLFENSTER (STYLISCH) ---
+ShowMenu:
+    StringSplit, KeyData, A_GuiControl, _
+    CurrentModus := KeyData1, CurrentButton := KeyData2
+    IsEncoder := (CurrentButton = "Enc")
+    
+    Gui, Menu:New, -Caption +Border +AlwaysOnTop +Owner1
+    Gui, Menu:Color, %Col_Panel%
+    Gui, Menu:Font, S11 Bold C%Col_Accent%, Segoe UI Variable
+    Gui, Menu:Add, Text, w260 Center c%Col_Accent%, %CurrentButton%
+    
+    if (IsEncoder) {
+        IniRead, ActR, %SettingsFile%, %CurrentModus%, %CurrentButton%R, NoAction
+        IniRead, ActL, %SettingsFile%, %CurrentModus%, %CurrentButton%L, NoAction
+        Gui, Menu:Font, S9 Normal C%Col_SubText%
+        Gui, Menu:Add, Text, ,  RECHTS (Ist: %ActR%)
+        Gui, Menu:Add, ListBox, vActionR w260 r6 Background%Col_BG% Color%Col_Text%, %ActionList%
+        Gui, Menu:Add, Text, ,  LINKS (Ist: %ActL%)
+        Gui, Menu:Add, ListBox, vActionL w260 r6 Background%Col_BG% Color%Col_Text%, %ActionList%
+    } else {
+        IniRead, CurrentAct, %SettingsFile%, %CurrentModus%, %CurrentButton%, NoAction
+        Gui, Menu:Font, S9 Normal C%Col_SubText%
+        Gui, Menu:Add, Text, w260 Center, Aktuelle Aktion: %CurrentAct%
+        Gui, Menu:Add, ListBox, vActionSingle w260 r12 Background%Col_BG% Color%Col_Text%, %ActionList%
+    }
+    Gui, Menu:Add, Text, , 
+    Gui, Menu:Add, Button, w120 h35 x10 gSaveAction Default,  SAVE
+    Gui, Menu:Add, Button, w120 h35 x140 yp gMenuGuiClose,  CANCEL
+    Gui, Menu:Show
+return
+
+; ... (Logik-Teil bleibt identisch) ...
+SaveAction:
+    Gui, Menu:Submit
+    if (IsEncoder) {
+        FinalR := ParseAction(ActionR), FinalL := ParseAction(ActionL)
+        if (FinalR != "")
+            IniWrite, %FinalR%, %SettingsFile%, %CurrentModus%, %CurrentButton%R
+        if (FinalL != "")
+            IniWrite, %FinalL%, %SettingsFile%, %CurrentModus%, %CurrentButton%L
+    } else {
+        FinalAction := ParseAction(ActionSingle)
+        if (FinalAction != "")
+            IniWrite, %FinalAction%, %SettingsFile%, %CurrentModus%, %CurrentButton%
+    }
+    Gui, Menu:Destroy
+return
+
+ParseAction(ActionRaw) {
+    if (ActionRaw = "Eigene Eingabe...") {
+        InputBox, Custom, Eigene Aktion, Gib AHK-Code ein:, , 240, 150
+        return (ErrorLevel) ? "" : Custom
+    } else if (ActionRaw = "Browser öffnen")
+        return "run chrome.exe"
+    RegExMatch(ActionRaw, "\((.*)\)", Match)
+    return Match1
+}
+
+MenuGuiClose:
+    Gui, Menu:Destroy
+return
+
+ReloadScript:
+    Reload
+return
+
+GuiClose:
+ExitApp
+
+; --- HOTKEYS ---
+F13::Go("Modus1", "T1")
+F14::Go("Modus1", "T2")
+F15::Go("Modus1", "T3")
+F16::Go("Modus1", "T4")
+F17::Go("Modus1", "T5")
+F18::Go("Modus1", "T6")
+F19::Go("Modus1", "EncR") 
+F20::Go("Modus1", "EncL") 
+F21::Go("Modus2", "T1")
+F22::Go("Modus2", "T2")
+F23::Go("Modus2", "T3")
+F24::Go("Modus2", "T4")
+
+Go(m, k) {
+    global SettingsFile
+    IniRead, act, %SettingsFile%, %m%, %k%, NoAction
+    if (act != "NoAction") {
+        if (InStr(act, "run "))
+            Run, % SubStr(act, 5)
+        else
+            SendInput, %act%
+    }
+}
