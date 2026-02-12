@@ -31,8 +31,10 @@ const unsigned long debounceDelay = 50;
 #define ENC_PIN2 7
 RotaryEncoder encoder(ENC_PIN1, ENC_PIN2);
 long lastEncPos = 0;
-const uint8_t encRight[2] = {KEY_F13, KEY_F14};
-const uint8_t encLeft[2]  = {KEY_F15, KEY_F16};
+
+// Immer Ctrl + F13 für rechts, Ctrl + F14 für links
+const uint8_t encRight[2] = {KEY_F13, KEY_F13};
+const uint8_t encLeft[2]  = {KEY_F14, KEY_F14};
 
 /* ================= UI ================= */
 String currentText = "";
@@ -111,7 +113,7 @@ void handleMode() {
     modeButtonState = reading;
   }
   lastModeReading = reading;
-}
+}ba
 
 String getModeText() {
   return (mode == 0) ? "Modus 1" : "Modus 2";
@@ -156,14 +158,20 @@ void handleEncoder() {
   if (newPos != lastEncPos) {
     String txt;
     if (newPos > lastEncPos) {
+      // Ctrl + F13
+      Keyboard.press(KEY_LEFT_CTRL);
       Keyboard.press(encRight[mode]);
       delay(3);
       Keyboard.release(encRight[mode]);
+      Keyboard.release(KEY_LEFT_CTRL);
       txt = "Encoder rechts";
     } else {
+      // Ctrl + F14
+      Keyboard.press(KEY_LEFT_CTRL);
       Keyboard.press(encLeft[mode]);
       delay(3);
       Keyboard.release(encLeft[mode]);
+      Keyboard.release(KEY_LEFT_CTRL);
       txt = "Encoder links";
     }
 
@@ -266,3 +274,4 @@ void showBootScreen() {
     display.display();
   }
 }
+aaabbaaaaaaaaaaabbbaabbaabbbbaabbab
