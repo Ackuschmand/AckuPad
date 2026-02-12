@@ -1,37 +1,59 @@
 #include <Keyboard.h>
-#include <Encoder.h>
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <RotaryEncoder.h>
 
-/* ===== DISPLAY ===== */
+/* ================= DISPLAY ================= */
 #define SCREEN_WIDTH 128
 #define SCREEN_HEIGHT 64
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, -1);
 
-/* ===== BUTTONS ===== */
+/* ================= BUTTONS ================= */
 const int buttonPins[6] = {28, 29, 0, 1, 2, 4};
-
+// Keymap: Taste1 zeigt F13 usw.
 const uint8_t keyMap[2][6] = {
-  {KEY_F13, KEY_F14, KEY_F15, KEY_F16, KEY_F17, KEY_F18}, // Modus 0
-  {KEY_F19, KEY_F20, KEY_F21, KEY_F22, KEY_F23, KEY_F24}  // Modus 1
+  {KEY_F13, KEY_F14, KEY_F15, KEY_F16, KEY_F17, KEY_F18},
+  {KEY_F19, KEY_F20, KEY_F21, KEY_F22, KEY_F23, KEY_F24}
 };
-
 bool lastButtonState[6];
 
-/* ===== MODE SWITCH ===== */
+/* ================= MODE SWITCH ================= */
 #define MODE_PIN 3
 int mode = 0;
-int lastMode = -1;
+bool lastModeReading = HIGH;
+bool modeButtonState = HIGH;
+unsigned long lastDebounceTime = 0;
+const unsigned long debounceDelay = 50;
 
-/* ===== ENCODER ===== */
-Encoder encoder(6, 7);
+/* ================= ENCODER ================= */
+#define ENC_PIN1 6
+#define ENC_PIN2 7
+RotaryEncoder encoder(ENC_PIN1, ENC_PIN2);
 long lastEncPos = 0;
+const uint8_t encRight[2] = {KEY_F13, KEY_F14};
+const uint8_t encLeft[2]  = {KEY_F15, KEY_F16};
 
-const uint8_t encRight[2] = {KEY_F25, KEY_F27};
-const uint8_t encLeft [2] = {KEY_F26, KEY_F28};
+/* ================= UI ================= */
+String currentText = "";
+bool showingMessage = false;
+bool holdActive = false;
+unsigned long messageUntil = 0;
+unsigned long lastEncoderMove = 0;
+bool encoderActive = false;
 
-/* ===== SETUP ===== */
+/* ================= FUNKTIONSDEKLARATION ================= */
+void showBootScreen();
+void showText(String text, bool animate, bool slow);
+void slideToText(String newText, bool slow = false);
+void drawFrame();
+void drawCenteredHorizontalOnly(String text, int xOffset = 0);
+String getModeText();
+void handleMode();
+void handleButtons();
+void handleEncoder();
+
+/* ================= SETUP ================= */
 void setup() {
   Keyboard.begin();
 
@@ -41,66 +63,206 @@ void setup() {
   }
 
   pinMode(MODE_PIN, INPUT_PULLUP);
+  pinMode(ENC_PIN1, INPUT_PULLUP);
+  pinMode(ENC_PIN2, INPUT_PULLUP);
 
   Wire.setSDA(26);
   Wire.setSCL(27);
   Wire.begin();
 
   display.begin(SSD1306_SWITCHCAPVCC, 0x3C);
-  display.setTextSize(2);
   display.setTextColor(SSD1306_WHITE);
-  updateDisplay();
+
+  showBootScreen();
+  showText(getModeText(), false, false); // initial Modus anzeigen
 }
 
-/* ===== LOOP ===== */
+/* ================= LOOP ================= */
 void loop() {
   handleMode();
   handleButtons();
   handleEncoder();
-}
 
-/* ===== FUNCTIONS ===== */
+  // Encoder Nachlauf (1 Sekunde nach letzter Bewegung)
+  if (encoderActive && millis() - lastEncoderMove > 1000) {
+    encoderActive = false;
+    showingMessage = false;
+    showText(getModeText(), false, false);
+  }
 
-void handleMode() {
-  mode = (digitalRead(MODE_PIN) == LOW) ? 1 : 0;
-  if (mode != lastMode) {
-    updateDisplay();
-    lastMode = mode;
+  // Halteanzeige bei gedrückten Tasten
+  if (holdActive && millis() > messageUntil) {
+    messageUntil = millis() + 200; // verlängern solange gedrückt
   }
 }
 
+/* ================= MODE ================= */
+void handleMode() {
+  bool reading = digitalRead(MODE_PIN);
+
+  if (reading != lastModeReading)
+    lastDebounceTime = millis();
+
+  if ((millis() - lastDebounceTime) > debounceDelay) {
+    if (reading == LOW && modeButtonState == HIGH) {
+      mode = 1 - mode;
+      slideToText(getModeText(), true); // langsamer Modus-Wechsel
+    }
+    modeButtonState = reading;
+  }
+  lastModeReading = reading;
+}
+
+String getModeText() {
+  return (mode == 0) ? "Modus 1" : "Modus 2";
+}
+
+/* ================= BUTTONS ================= */
 void handleButtons() {
+  holdActive = false;
+
   for (int i = 0; i < 6; i++) {
     bool cur = digitalRead(buttonPins[i]);
+
     if (lastButtonState[i] == HIGH && cur == LOW) {
       Keyboard.press(keyMap[mode][i]);
       delay(4);
       Keyboard.release(keyMap[mode][i]);
+
+      unsigned long now = millis();
+      messageUntil = now + 1500;
+
+      // Tastenanzeige korrekt vertauscht
+      String displayName = String(i + 1);
+      if (i == 0) displayName = "2"; // Taste1 zeigt "Taste 2"
+      else if (i == 1) displayName = "1"; // Taste2 zeigt "Taste 1"
+
+      showText("Taste " + displayName, false, false); // schneller Slide
     }
+
+    if (cur == LOW && currentText.startsWith("Taste")) {
+      holdActive = true;
+    }
+
     lastButtonState[i] = cur;
   }
 }
 
+/* ================= ENCODER ================= */
 void handleEncoder() {
-  long pos = encoder.read() / 4;
-  if (pos != lastEncPos) {
-    if (pos > lastEncPos) {
+  encoder.tick();
+  long newPos = encoder.getPosition();
+
+  if (newPos != lastEncPos) {
+    String txt;
+    if (newPos > lastEncPos) {
       Keyboard.press(encRight[mode]);
       delay(3);
       Keyboard.release(encRight[mode]);
+      txt = "Encoder rechts";
     } else {
       Keyboard.press(encLeft[mode]);
       delay(3);
       Keyboard.release(encLeft[mode]);
+      txt = "Encoder links";
     }
-    lastEncPos = pos;
+
+    showText(txt, false, false); // schneller Slide
+    encoderActive = true;
+    lastEncoderMove = millis();
+    lastEncPos = newPos;
   }
 }
 
-void updateDisplay() {
+/* ================= DISPLAY ================= */
+void drawFrame() {
+  display.drawRect(0, 0, 128, 64, SSD1306_WHITE);
+}
+
+void drawCenteredHorizontalOnly(String text, int xOffset) {
+  display.setTextSize(2);
+  int16_t x1, y1;
+  uint16_t w, h;
+  display.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
+  int x = ((128 - w) / 2) + xOffset;
+  int y = (64 - h) / 2; // Vertikale Mitte
+  display.setCursor(x, y);
+  display.print(text);
+}
+
+/* --------- Slide Text --------- */
+void slideToText(String newText, bool slow) {
+  String oldText = currentText;
+  int step = slow ? 4 : 16;
+  int delayTime = slow ? 15 : 5;
+
+  // Alten Text nach links raus
+  for (int offset = 0; offset <= 128; offset += step) {
+    display.clearDisplay();
+    drawFrame();
+    drawCenteredHorizontalOnly(oldText, -offset);
+    display.display();
+    delay(delayTime);
+  }
+
+  // Neuen Text von rechts nach innen
+  for (int offset = 128; offset >= 0; offset -= step) {
+    display.clearDisplay();
+    drawFrame();
+    drawCenteredHorizontalOnly(newText, offset);
+    display.display();
+    delay(delayTime);
+  }
+
+  // Endgültig zentriert
   display.clearDisplay();
-  display.setCursor(0, 0);
-  display.print("MODE ");
-  display.print(mode);
+  drawFrame();
+  drawCenteredHorizontalOnly(newText, 0);
   display.display();
+
+  currentText = newText;
+  showingMessage = true;
+  messageUntil = millis() + 1500;
+}
+
+void showText(String text, bool animate, bool slow) {
+  if (animate)
+    slideToText(text, slow);
+  else {
+    display.clearDisplay();
+    drawFrame();
+    drawCenteredHorizontalOnly(text, 0);
+    display.display();
+    currentText = text;
+    showingMessage = true;
+    messageUntil = millis() + 1500;
+  }
+}
+
+/* ================= BOOTSCREEN ================= */
+void showBootScreen() {
+  display.setTextSize(2);
+  String text = "AckuPad";
+
+  unsigned long startTime = millis();
+  const unsigned long duration = 1500;
+
+  while (millis() - startTime < duration) {
+    float progress = (millis() - startTime) / (float)duration;
+    int barWidth = progress * 100;
+
+    display.clearDisplay();
+    drawFrame();
+
+    int16_t x1, y1;
+    uint16_t w, h;
+    display.getTextBounds(text, 0, 0, &x1, &y1, &w, &h);
+    display.setCursor((128 - w) / 2, 20);
+    display.print(text);
+
+    display.drawRect(14, 40, 100, 8, SSD1306_WHITE);
+    display.fillRect(14, 40, barWidth, 8, SSD1306_WHITE);
+
+    display.display();
+  }
 }
