@@ -61,4 +61,9 @@ Case:
 <img width="743" height="575" alt="3D model" src="https://github.com/user-attachments/assets/6fec6216-bd4d-4460-8570-6134e999f548" />
 
 
+Finished AckuPad:
+
+![WhatsApp Image 2026-02-12 at 22 57 36](https://github.com/user-attachments/assets/2f34057d-79d5-4867-8e5d-d9e7a8249201)
+
+![WhatsApp Image 2026-02-12 at 22 57 36(1)](https://github.com/user-attachments/assets/c876774d-a35b-4ebc-b0cc-6a45dd8914e9)
 
