@@ -1,125 +1,73 @@
-RP2040 Makropad – Fully Programmable (6 Buttons + Encoder + Mode Switch + OLED)
+⌨️ AckuPad Setup Guide
 
-This project shows how to build a custom Makropad with 6 buttons, an encoder, mode switch, and OLED display.
-All buttons and the encoder are PC-controlled, meaning you can assign any function on the PC without reflashing the firmware.
+Welcome to the Setup Guide for your AckuPad! This document will guide you through flashing the firmware onto the microcontroller and running the configuration UI on your PC.
+📁 Project Structure
 
-Contents
+    RP2040 Code.ino: The firmware for the microcontroller (Arduino-based).
 
-Hardware Requirements
+    AckuPad UI.ahk: The Windows configuration tool (AutoHotkey).
 
-Wiring
+🛠 Step 1: Programming the Controller (Firmware)
 
-RP2040 Firmware
+The RP2040 (e.g., Raspberry Pi Pico or Waveshare RP2040-Zero) acts as the heart of your macropad.
 
-PC Software (Free)
+    Install Arduino IDE: Download and install the Arduino IDE.
 
-Step-by-Step Setup
+    Add Board Support:
 
-Extensions / Tips
+        Go to File > Preferences.
 
-1️⃣ Hardware Requirements
+        Add this URL to the "Additional Boards Manager URLs" field:
+        https://github.com/earlephilhower/arduino-pico/releases/download/global/package_rp2040_index.json
 
-1 × Seeed XIAO RP2040
+        Go to Tools > Board > Boards Manager, search for RP2040, and install the package by Earle F. Philhower.
 
-6 × Push Buttons
+    Install Libraries:
 
-1 × Mode Switch
+        Open Sketch > Include Library > Manage Libraries.
 
-1 × Rotary Encoder (no click)
+        Search for HID-Project (by NicoHood) and install it. This allows the pad to act as a keyboard.
 
-1 × I²C OLED 128×64 (optional)
+    Flash the Code:
 
-Jumper wires / Breadboard or PCB
+        Open RP2040 Code.ino in the Arduino IDE.
 
-Optional: Enclosure, resistors if needed (internal pull-ups used)
+        Connect your macropad to your PC via USB.
 
-2️⃣ Wiring
-Buttons (connect to GND)
+        Under Tools > Board, select your specific RP2040 board.
 
-Button 1 → GPIO 28
+        Click the Upload button (arrow icon).
 
-Button 2 → GPIO 29
+🖥 Step 2: Setting up the User Interface (Windows)
 
-Button 3 → GPIO 0
+The UI tool allows you to assign macros graphically without having to change the Arduino code every time.
 
-Button 4 → GPIO 1
+    Install AutoHotkey:
 
-Button 5 → GPIO 2
+        Download and install AutoHotkey v1.1 (important: the script is written for v1.1) from autohotkey.com.
 
-Button 6 → GPIO 4
+    Prepare Files:
 
-Mode Switch
+        Ensure the image files layout_m1.png and layout_m2.png are in the same folder as AckuPad UI.ahk.
 
-Pin → GPIO 3
+    Run the Script:
 
-GND → GND
+        Double-click AckuPad UI.ahk.
 
-Encoder (no click)
+        A green "H" icon will appear in your system tray (bottom right corner near the clock).
 
-A → GPIO 6
+    Configure:
 
-B → GPIO 7
+        Click on the button areas in the app graphic to assign actions like Copy, Paste, or Media controls.
 
-OLED (I²C)
+        Click SAVE to store the settings in the AckuPadSettings.ini file.
 
-SDA → GPIO 26
+💡 Troubleshooting
 
-SCL → GPIO 27
+    Buttons not reacting: Check the digitalRead pin mapping in the Arduino code to ensure it matches your physical wiring.
 
-3️⃣ RP2040 Firmware
+    UI not showing images: The images must be named exactly layout_m1.png and layout_m2.png and placed in the same directory as the script.
 
-Filename: RP2040 Code.ino
+    F-Key conflict: The macropad sends F13–F24 by default. Ensure no other software is blocking these keys.
 
-Features:
-
-6 buttons with 2 functions via mode switch
-
-Encoder has 2 functions per mode
-
-OLED displays current mode
-
-All actions are sent as HID key events, no fixed macros in the device
-
-4️⃣ PC Software (Free)
-
-Program: AutoHotkey (AHK) – free and open-source
-
-Filename: Test Script.ahk
-
-Features:
-
-All buttons and encoder can be freely assigned on the PC
-
-Mode switch changes all button/encoder functions
-
-5️⃣ Step-by-Step Setup
-
-Assemble the hardware according to the pin layout
-
-Install Arduino IDE
-
-Select RP2040 board (XIAO RP2040)
-
-Upload firmware (RP2040 Code.ino)
-
-Install AutoHotkey
-
-Run script (Test Script.ahk)
-
-Flip the mode switch → OLED shows current mode
-
-Test buttons and encoder
-
-Modify the functions anytime in the AHK script without reflashing the firmware
-
-6️⃣ Extensions / Tips
-
-Display labels for buttons per mode on OLED
-
-More than 2 modes → use extra switches or buttons
-
-Encoder can perform different actions per mode
-
-Save multiple profiles (gaming, video editing, office) in AutoHotkey
-
-All buttons and encoder are fully dynamic, firmware stays the same
+Enjoy your AckuPad! 🚀
