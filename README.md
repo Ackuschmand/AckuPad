@@ -39,7 +39,7 @@ Programmable Makropad based on a Seeed XIAO RP2040 with 6 switches, a toggle swi
 ## Files
 
 - `RP2040 Code.ino` – firmware  
-- `Test Script.ahk` – PC script  
+- `AckuPad UI.ahk` – PC script  
 - PCB and CAD files are in their respective folders
 
 ---
