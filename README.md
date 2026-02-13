@@ -68,6 +68,6 @@ Finished AckuPad:
 ![WhatsApp Image 2026-02-12 at 22 57 36(1)](https://github.com/user-attachments/assets/c876774d-a35b-4ebc-b0cc-6a45dd8914e9)
 
 
-Youtube Video:
+Youtube video:
 
-https://youtu.be/QJNBsNUNdTw?si=pwibzfsT7n_hA_oA
+[![Makropad Video](https://img.youtube.com/vi/QJNBsNUNdTw/0.jpg)](https://youtu.be/QJNBsNUNdTw?si=pwibzfsT7n_hA_oA)
